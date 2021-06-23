@@ -3,6 +3,31 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_dark">
+    >
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="231dp" />
+
+    <EditText
+        android:id="@+id/stockSearchForm"
+        android:layout_width="376dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="Enter stock symbol/ticker"
+        android:inputType="textCapCharacters" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="18dp" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="289dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Search" />
+
 
 </LinearLayout>

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new SearchFragment();
                             break;
                         case R.id.nav_history:
-                            selectedFragment = new TransactionsFragment();
+                            selectedFragment = new SettingsFragment();
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

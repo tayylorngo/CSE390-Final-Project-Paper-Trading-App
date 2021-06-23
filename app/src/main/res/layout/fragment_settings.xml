@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15sp"
+    >
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+    <TextView
+        android:id="@+id/settingsTitleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="35sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="29dp" />
+
+    <Button
+        android:id="@+id/addFundsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="add funds"
+        app:backgroundTint="@color/green" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <TextView
+            android:id="@+id/sortByLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sort Assets By:" />
+
+        <RadioButton
+            android:id="@+id/defaultRadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Default" />
+
+        <RadioButton
+            android:id="@+id/priceRadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last Price" />
+
+        <RadioButton
+            android:id="@+id/profitRadioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Return" />
+
+        <RadioButton
+            android:id="@+id/radioButton7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Equity" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/sortOrderLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sort Order:" />
+
+    <RadioGroup
+        android:id="@+id/sortByRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/ascendingRadioBtn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:text="Ascending" />
+
+        <RadioButton
+            android:id="@+id/descendingRadioBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descending" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/saveSettingsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        app:backgroundTint="@color/teal_700" />
+
+</LinearLayout>
