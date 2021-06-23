@@ -31,19 +31,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="9dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/stocksTitleLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Stocks"
+            android:layout_width="wrap_content"
+            android:layout_height="39dp"
+            android:textStyle="bold"
             android:textSize="20dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:text="Stocks" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
