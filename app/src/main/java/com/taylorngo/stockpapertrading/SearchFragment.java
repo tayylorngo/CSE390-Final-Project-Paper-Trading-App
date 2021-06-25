@@ -1,13 +1,16 @@
 package com.taylorngo.stockpapertrading;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,11 +32,13 @@ public class SearchFragment extends Fragment {
     private String stockName;
     private double stockPrice;
     private RequestQueue mQueue;
+    private Context mContext;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        mContext = view.getContext();
         EditText stockInput = view.findViewById(R.id.stockSearchForm);
         Button searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +46,7 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 stockTicker = stockInput.getText().toString();
                 getStockData();
+                closeKeyboard();
             }
         });
         mQueue = Volley.newRequestQueue(getActivity());
@@ -57,6 +63,8 @@ public class SearchFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         try {
                             if(response.length() == 0){
+                                Toast toast = Toast.makeText(mContext, "Asset not found.", Toast.LENGTH_SHORT);
+                                toast.show();
                                 return;
                             }
                             for(int i = 0; i < response.length(); i++){
@@ -80,5 +88,13 @@ public class SearchFragment extends Fragment {
             }
         });
         mQueue.add(request);
+    }
+
+    public void closeKeyboard(){
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
