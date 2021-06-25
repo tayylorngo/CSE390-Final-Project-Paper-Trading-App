@@ -32,13 +32,13 @@ public class StockDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_data);
-        getUserInfo();
-        mQueue = Volley.newRequestQueue(this);
-        TextView stockNameLabel = findViewById(R.id.stockTickerLabel);
         Intent intent = getIntent();
         this.stockTicker = intent.getStringExtra("stockName");
-        stockNameLabel.setText(stockTicker);
+        mQueue = Volley.newRequestQueue(this);
+        getUserInfo();
         getStockData();
+        TextView stockNameLabel = findViewById(R.id.stockTickerLabel);
+        stockNameLabel.setText(stockTicker);
     }
 
     public void getUserInfo(){
@@ -52,7 +52,7 @@ public class StockDataActivity extends AppCompatActivity {
 
     public void getStockData(){
         String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
-        String urlString = "https://financialmodelingprep.com/api/v3/quote/AAPL?apikey=" + API_KEY;
+        String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
