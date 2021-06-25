@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import java.sql.SQLOutput;
 
 public class StockDataActivity extends AppCompatActivity {
-    private RequestQueue mQueue;
     private String stockName;
     private String stockTicker;
     private double stockPrice;
@@ -33,12 +32,11 @@ public class StockDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_data);
         Intent intent = getIntent();
-        this.stockTicker = intent.getStringExtra("stockName");
-        mQueue = Volley.newRequestQueue(this);
+        this.stockTicker = intent.getStringExtra("stockTicker");
+        this.stockName = intent.getStringExtra("stockName");
+        this.stockPrice = intent.getDoubleExtra("stockPrice", 0.0);
         getUserInfo();
-        getStockData();
-        TextView stockNameLabel = findViewById(R.id.stockTickerLabel);
-        stockNameLabel.setText(stockTicker);
+        updateInfo();
     }
 
     public void getUserInfo(){
@@ -50,38 +48,12 @@ public class StockDataActivity extends AppCompatActivity {
         averageCostLabel.setText("Average Cost: $" + averageCost);
     }
 
-    public void getStockData(){
-        String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
-        String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            for(int i = 0; i < response.length(); i++){
-                                JSONObject stock = response.getJSONObject(i);
-                                stockName = stock.getString("name");
-                                stockPrice = stock.getDouble("price");
-                            }
-                            updateInfo();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        mQueue.add(request);
-    }
-
     public void updateInfo(){
         TextView stockNameLabel = findViewById(R.id.stockNameLabel);
         TextView stockPriceLabel = findViewById(R.id.stockPriceLabel);
+        TextView stockTickerLabel = findViewById(R.id.stockTickerLabel);
         stockNameLabel.setText(stockName);
+        stockTickerLabel.setText(stockTicker);
         stockPriceLabel.setText("$" + stockPrice);
     }
 
