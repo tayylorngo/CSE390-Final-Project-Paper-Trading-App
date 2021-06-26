@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -39,10 +41,27 @@ public class AddFundsDialog extends AppCompatDialogFragment {
         });
 
         EditText fundsInput = view.findViewById(R.id.addFundsInput);
+        fundsInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 1 && s.toString().equals("0"))
+                    fundsInput.setText("");
+            }
+        });
+
         Button addFundsConfirmButton = view.findViewById(R.id.addFundsConfirmButton);
         addFundsConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(fundsInput.getText().toString().isEmpty()){
+                    return;
+                }
                 listener.applyTexts(Double.parseDouble(fundsInput.getText().toString()));
             }
         });
