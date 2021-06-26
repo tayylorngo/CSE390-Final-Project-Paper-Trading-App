@@ -22,7 +22,8 @@ public class StocksDBHelper extends SQLiteOpenHelper {
                 StockEntry.TABLE_NAME + " (" +
                 StockEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 StockEntry.COLUMN_NAME + " TEXT NOT NULL, " +
-                StockEntry.COLUMN_AMOUNT + " INTEGER NOT NULL, " +
+                StockEntry.COLUMN_AMOUNT + " DOUBLE NOT NULL, " +
+                StockEntry.COLUMN_COST + " DOUBLE NOT NULL, " +
                 StockEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
         db.execSQL(SQLITE_CREATE_STOCKSLIST_TABLE);

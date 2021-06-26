@@ -10,6 +10,7 @@ public class StocksContract {
         public static final String TABLE_NAME = "stocksList";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_AMOUNT = "amount";
+        public static final String COLUMN_COST = "cost";
         public static final String COLUMN_TIMESTAMP = "timestamp";
     }
 
