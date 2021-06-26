@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class SettingsFragment extends Fragment {
 
     public static final String SHARED_PREFS = "sharedPrefs";
+    private AddFundsDialog addFundsDialog;
 
     @Nullable
     @Override
@@ -25,6 +29,14 @@ public class SettingsFragment extends Fragment {
         RadioButton lastPriceRadio = view.findViewById(R.id.priceRadioBtn);
         RadioButton totalReturnRadio = view.findViewById(R.id.profitRadioButton);
         RadioButton equityRadio = view.findViewById(R.id.equityRadioBtn);
+
+        Button addFundsButton = view.findViewById(R.id.addFundsButton);
+        addFundsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddFundsDialog();
+            }
+        });
 
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         switch(sharedPreferences.getString("sortBy", "")){
@@ -79,4 +91,14 @@ public class SettingsFragment extends Fragment {
         });
         return view;
     }
+
+    public void openAddFundsDialog(){
+        addFundsDialog = new AddFundsDialog();
+        addFundsDialog.show(getActivity().getSupportFragmentManager(), "Add Funds");
+    }
+
+    public void closeDialog(){
+        this.addFundsDialog.dismiss();
+    }
+
 }

@@ -4,12 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddFundsDialog.AddFundsDialogListener {
+    private static final String SHARED_PREFS = "sharedPrefs";
+    private SettingsFragment currFrag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -32,11 +41,25 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.nav_history:
                             selectedFragment = new SettingsFragment();
-                            break;
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                    selectedFragment, "SETTINGS").commit();
+                            currFrag = (SettingsFragment) selectedFragment;
+                            return true;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();
                     return true;
                 }
             };
+
+    @Override
+    public void applyTexts(double amount) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("balance", String.valueOf(amount));
+        editor.apply();
+        Toast toast = Toast.makeText(this, "Added $" + String.valueOf(amount), Toast.LENGTH_SHORT);
+        toast.show();
+        currFrag.closeDialog();
+    }
 }
