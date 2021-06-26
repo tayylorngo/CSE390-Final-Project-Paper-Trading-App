@@ -1,26 +1,15 @@
 package com.taylorngo.stockpapertrading;
 
-import androidx.appcompat.app.AppCompatActivity;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.sql.SQLOutput;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class StockDataActivity extends AppCompatActivity implements BuyStockDialog.BuyStockDialogListener {
     private String stockName;
@@ -31,12 +20,17 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     private double totalReturn;
     private double averageCost;
 
+    private SQLiteDatabase mDatabase;
     private BuyStockDialog buyStockDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock_data);
+
+        StocksDBHelper dbHelper = new StocksDBHelper(this);
+        mDatabase = dbHelper.getWritableDatabase();
+
         Intent intent = getIntent();
         this.stockTicker = intent.getStringExtra("stockTicker");
         this.stockName = intent.getStringExtra("stockName");
@@ -96,8 +90,28 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
             toast.show();
         }
         else{
-            System.out.println("YOU COPPED " + amount);
+            buyStock(amount);
             buyStockDialog.dismiss();
         }
     }
+
+    public void buyStock(double amount){
+        String name = this.stockTicker;
+        double cost = amount * stockPrice;
+        ContentValues cv = new ContentValues();
+        cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
+        cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
+        cv.put(StocksContract.StockEntry.COLUMN_COST, cost);
+
+        HomeFragment.mAdapter.swapCursor(mDatabase.query(
+                StocksContract.StockEntry.TABLE_NAME,
+                null, null, null, null, null,
+                StocksContract.StockEntry.COLUMN_TIMESTAMP + " DESC"
+        ));
+
+        Toast toast = Toast.makeText(this, "Purchased successfully", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+
 }

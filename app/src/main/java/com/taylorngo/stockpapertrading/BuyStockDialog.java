@@ -94,7 +94,6 @@ public class BuyStockDialog extends AppCompatDialogFragment {
                 listener.applyTexts(Double.parseDouble(amountToOrder.getText().toString()));
             }
         });
-
         return builder.create();
     }
 
