@@ -82,12 +82,12 @@ public class SellStockDialog extends AppCompatDialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(amountToSellInput.getText().toString().isEmpty()){
-                    totalSellValueLabel.setText("Total Cost: $" + 0.0);
+                    totalSellValueLabel.setText("Total: $" + 0.0);
                     return;
                 }
                 double total = stockPrice * Double.parseDouble(amountToSellInput.getText().toString());
                 total = Math.round(total * 100.0) / 100.0;
-                totalSellValueLabel.setText("Total Cost: $" + total);
+                totalSellValueLabel.setText("Total: $" + total);
             }
         });
 

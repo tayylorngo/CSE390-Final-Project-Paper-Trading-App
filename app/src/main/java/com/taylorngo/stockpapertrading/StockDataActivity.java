@@ -130,6 +130,13 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         sharesOwned += amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
+        this.totalCost = currTotalCost;
+        this.averageCost = totalCost / sharesOwned;
+        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+
+        this.totalReturn = totalCost - (stockPrice * sharesOwned);
+        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
         cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
@@ -161,14 +168,19 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         totalBalance = newBalance;
         editor.putString("balance", String.valueOf(newBalance));
         double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
-        System.out.println(currTotalCost);
         currTotalCost -= totalSellValue;
-        System.out.println(currTotalCost);
         editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
 
         sharesOwned -= amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
+
+        this.totalCost = currTotalCost;
+        this.averageCost = totalCost / sharesOwned;
+        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+
+        this.totalReturn = totalCost - (stockPrice * sharesOwned);
+        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
 
         if(sharesOwned == 0){
             mDatabase.delete(StocksContract.StockEntry.TABLE_NAME,

@@ -65,7 +65,6 @@ public class HomeFragment extends Fragment {
             totalCost += cursor.getDouble(3);
             cursor.moveToNext();
         }
-        System.out.println(totalCost);
         cursor.close();
         rDatabase.close();
         mDatabase = dbHelper.getWritableDatabase();
