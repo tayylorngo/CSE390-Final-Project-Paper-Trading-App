@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,16 +26,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
         TextView balanceLabel = view.findViewById(R.id.totalLabel);
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double totalBalance = Double.parseDouble(sharedPreferences.getString("balance", ""));
         balanceLabel.setText("$" + totalBalance);
         StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
         mDatabase = dbHelper.getWritableDatabase();
+
         RecyclerView recyclerView = view.findViewById(R.id.assetHoldingsView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext().getApplicationContext()));
         mAdapter = new StocksAdapter(view.getContext(), getAllItems());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         return view;
     }

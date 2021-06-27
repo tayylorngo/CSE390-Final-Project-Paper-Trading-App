@@ -3,6 +3,7 @@ package com.taylorngo.stockpapertrading;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SearchFragment extends Fragment {
+
+    private static final String SHARED_PREFS = "sharedPrefs";
 
     private String stockTicker;
     private String stockName;
@@ -56,7 +59,8 @@ public class SearchFragment extends Fragment {
     public void getStockData(){
         String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
-
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -76,6 +80,7 @@ public class SearchFragment extends Fragment {
                             intent.putExtra("stockTicker", stockTicker);
                             intent.putExtra("stockName", stockName);
                             intent.putExtra("stockPrice", stockPrice);
+                            intent.putExtra("totalBalance", currBalance);
                             startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -1,7 +1,9 @@
 package com.taylorngo.stockpapertrading;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class StockDataActivity extends AppCompatActivity implements BuyStockDialog.BuyStockDialogListener {
+
+    private static final String SHARED_PREFS = "sharedPrefs";
+
     private String stockName;
     private String stockTicker;
     private double stockPrice;
@@ -96,12 +101,19 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     }
 
     public void buyStock(double amount){
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         String name = this.stockTicker;
         double cost = amount * stockPrice;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("balance", String.valueOf(currBalance - cost));
+        editor.apply();
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
         cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
         cv.put(StocksContract.StockEntry.COLUMN_COST, cost);
+
+        mDatabase.insert(StocksContract.StockEntry.TABLE_NAME, null, cv);
 
         HomeFragment.mAdapter.swapCursor(mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,

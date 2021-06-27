@@ -48,10 +48,12 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
             return;
         }
         String ticker = mCursor.getString(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_NAME));
+        System.out.println(ticker);
         holder.stockItemNameLabel.setText(ticker);
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
         holder.stockItemSharesLabel.setText(shares + " shares");
         getStockData(ticker);
+        System.out.println(stockPrice);
         holder.stockItemPriceLabel.setText("$" + stockPrice);
     }
 
@@ -109,7 +111,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         public StocksViewHolder(View itemView) {
             super(itemView);
             stockItemNameLabel = itemView.findViewById(R.id.stockItemNameLabel);
-            stockItemPriceLabel = itemView.findViewById(R.id.stockPriceLabel);
+            stockItemPriceLabel = itemView.findViewById(R.id.stockItemPriceLabel);
             stockItemSharesLabel = itemView.findViewById(R.id.stockItemSharesLabel);
         }
     }
