@@ -100,6 +100,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         }
         else{
             buyStock(amount);
+            getUserInfo();
             buyStockDialog.dismiss();
         }
     }
@@ -112,11 +113,16 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         SharedPreferences.Editor editor = sharedPreferences.edit();
         double newBalance = currBalance - cost;
         newBalance = Math.round(newBalance * 100.0) / 100.0;
+        totalBalance = newBalance;
         editor.putString("balance", String.valueOf(newBalance));
         double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         currTotalCost += cost;
         editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
+
+        sharesOwned -= amount;
+        sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
+
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
         cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
@@ -145,6 +151,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         SharedPreferences.Editor editor = sharedPreferences.edit();
         double newBalance = currBalance + totalSellValue;
         newBalance = Math.round(newBalance * 100.0) / 100.0;
+        totalBalance = newBalance;
         editor.putString("balance", String.valueOf(newBalance));
         double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         System.out.println(currTotalCost);
@@ -153,19 +160,18 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
 
-        double sharesRemaining = sharesOwned - amount;
-        sharesRemaining = Math.round(sharesRemaining * 100.0) / 100.0;
+        sharesOwned += amount;
+        sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
-        if(sharesRemaining == 0){
+        if(sharesOwned == 0){
             mDatabase.delete(StocksContract.StockEntry.TABLE_NAME,
                     "name=?", new String[]{stockTicker});
         }
         else{
             ContentValues cv = new ContentValues();
             cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
-            cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, sharesRemaining);
+            cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, sharesOwned);
             cv.put(StocksContract.StockEntry.COLUMN_COST, (totalCost -  totalSellValue));
-
             mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
         }
 
@@ -176,6 +182,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         ));
         Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
         toast.show();
+        getUserInfo();
         sellStockDialog.dismiss();
     }
 }
