@@ -120,7 +120,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
 
-        sharesOwned -= amount;
+        sharesOwned += amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
         ContentValues cv = new ContentValues();
@@ -160,7 +160,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
 
-        sharesOwned += amount;
+        sharesOwned -= amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
         if(sharesOwned == 0){
