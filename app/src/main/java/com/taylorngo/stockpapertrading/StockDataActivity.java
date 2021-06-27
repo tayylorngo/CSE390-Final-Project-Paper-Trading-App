@@ -106,7 +106,9 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         String name = this.stockTicker;
         double cost = amount * stockPrice;
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("balance", String.valueOf(currBalance - cost));
+        double newBalance = currBalance - cost;
+        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
