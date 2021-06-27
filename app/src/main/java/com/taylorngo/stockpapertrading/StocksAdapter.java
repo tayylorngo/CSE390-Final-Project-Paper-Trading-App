@@ -2,6 +2,7 @@ package com.taylorngo.stockpapertrading;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +28,10 @@ import org.json.JSONObject;
 public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksViewHolder> {
     private Context mContext;
     private Cursor mCursor;
-//    private double stockPrice;
     private RequestQueue mQueue;
+
+    private static final String SHARED_PREFS = "sharedPrefs";
+    SharedPreferences sharedPreferences;
 
     public StocksAdapter(Context context, Cursor cursor){
         mContext = context;
@@ -38,6 +41,10 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
     @Override
     public StocksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.stock_item, parent, false);
+        sharedPreferences = itemView.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("totalCost", String.valueOf(0.0));
+        editor.apply();
         mQueue = Volley.newRequestQueue(itemView.getContext());
         return new StocksViewHolder(itemView);
     }
@@ -48,12 +55,11 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
             return;
         }
         String ticker = mCursor.getString(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_NAME));
-        System.out.println(ticker);
         holder.stockItemNameLabel.setText(ticker);
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
         holder.stockItemSharesLabel.setText(shares + " shares");
 
-        String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
+        String API_KEY = "4b2958e32e37bf03794dad84718b3219";
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
@@ -67,6 +73,13 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                             }
                             for(int i = 0; i < response.length(); i++){
                                 JSONObject stock = response.getJSONObject(i);
+                                String currTotalCostString = sharedPreferences.getString("totalCost", "0.0");
+                                double currTotalCost = Double.parseDouble(currTotalCostString);
+                                currTotalCost += stock.getDouble("price") * shares;
+                                currTotalCost = Math.round(currTotalCost * 100.0) / 100.0;
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("totalCost", String.valueOf(currTotalCost));
+                                editor.apply();
                                 holder.stockItemPriceLabel.setText("$" + stock.getDouble("price") * shares);
                             }
                         } catch (JSONException e) {

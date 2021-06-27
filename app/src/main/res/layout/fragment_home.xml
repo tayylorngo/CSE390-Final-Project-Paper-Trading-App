@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/totalLabel"
-        android:layout_width="127dp"
+        android:layout_width="236dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
@@ -29,6 +29,16 @@
         android:gravity="center"
         android:text="Total Profit/Loss: $0"
         android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/buyingPowerLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="Buying Power: $" />
 
     <LinearLayout
         android:layout_width="match_parent"

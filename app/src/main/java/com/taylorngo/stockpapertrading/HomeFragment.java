@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -17,9 +18,28 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class HomeFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private SQLiteDatabase mDatabase;
+    private SQLiteDatabase rDatabase;
+
+    private RequestQueue mQueue;
     static StocksAdapter mAdapter;
 
     @Nullable
@@ -28,16 +48,42 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         TextView balanceLabel = view.findViewById(R.id.totalLabel);
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        double totalBalance = Double.parseDouble(sharedPreferences.getString("balance", ""));
-        balanceLabel.setText("$" + totalBalance);
-        StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
-        mDatabase = dbHelper.getWritableDatabase();
 
+        TextView buyingPowerLabel = view.findViewById(R.id.buyingPowerLabel);
+        buyingPowerLabel.setText("Buying Power: $" + sharedPreferences.getString("balance", "0.0"));
+        double totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        double totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
+        double actualBalance = totalBalance + totalStocksPrice;
+        balanceLabel.setText("$" + (actualBalance));
+
+        double totalCost = 0.0;
+        StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
+        String selectQuery = "SELECT * FROM " + StocksContract.StockEntry.TABLE_NAME;
+        rDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = rDatabase.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            totalCost += cursor.getDouble(3);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        rDatabase.close();
+        mDatabase = dbHelper.getWritableDatabase();
         RecyclerView recyclerView = view.findViewById(R.id.assetHoldingsView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext().getApplicationContext()));
         mAdapter = new StocksAdapter(view.getContext(), getAllItems());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
+        actualBalance = totalBalance + totalStocksPrice;
+        actualBalance = Math.round(actualBalance * 100.0) / 100.0;
+        balanceLabel.setText("$" + (actualBalance));
+        TextView profitLabel = view.findViewById(R.id.profitLossLabel);
+        double profit = (totalStocksPrice - totalCost);
+        profit = Math.round(profit * 100.0) / 100.0;
+        profitLabel.setText("Total Profit/Loss: $" + profit);
         return view;
     }
 

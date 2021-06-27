@@ -109,6 +109,9 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         double newBalance = currBalance - cost;
         newBalance = Math.round(newBalance * 100.0) / 100.0;
         editor.putString("balance", String.valueOf(newBalance));
+        double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
+        currTotalCost += cost;
+        editor.putString("totalCost", String.valueOf(currTotalCost));
         editor.apply();
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);

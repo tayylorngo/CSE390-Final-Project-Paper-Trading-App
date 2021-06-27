@@ -57,7 +57,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void getStockData(){
-        String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
+        String API_KEY = "4b2958e32e37bf03794dad84718b3219";
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
