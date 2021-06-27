@@ -27,7 +27,7 @@ import org.json.JSONObject;
 public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksViewHolder> {
     private Context mContext;
     private Cursor mCursor;
-    private double stockPrice;
+//    private double stockPrice;
     private RequestQueue mQueue;
 
     public StocksAdapter(Context context, Cursor cursor){
@@ -52,15 +52,9 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         holder.stockItemNameLabel.setText(ticker);
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
         holder.stockItemSharesLabel.setText(shares + " shares");
-        getStockData(ticker);
-        System.out.println(stockPrice);
-        holder.stockItemPriceLabel.setText("$" + stockPrice);
-    }
 
-    public void getStockData(String stockTicker){
         String API_KEY = "2329aa49fc077f763ccd0d3839e6e913";
-        String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
-
+        String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -73,7 +67,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                             }
                             for(int i = 0; i < response.length(); i++){
                                 JSONObject stock = response.getJSONObject(i);
-                                stockPrice = stock.getDouble("price");
+                                holder.stockItemPriceLabel.setText("$" + stock.getDouble("price") * shares);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

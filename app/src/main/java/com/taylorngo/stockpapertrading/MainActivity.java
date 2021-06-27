@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
     public void applyTexts(double amount) {
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        double newBalance = amount + currBalance;
+        newBalance = Math.round(newBalance * 100.0) / 100.0;
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("balance", String.valueOf(amount + currBalance));
+        editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
         Toast toast = Toast.makeText(this, "Added $" + String.valueOf(amount), Toast.LENGTH_SHORT);
         toast.show();
