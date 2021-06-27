@@ -45,6 +45,13 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         this.totalBalance = intent.getDoubleExtra("totalBalance", 0.0);
         this.sharesOwned = intent.getDoubleExtra("sharesOwned", 0.0);
         this.totalCost = intent.getDoubleExtra("totalCost", 0.0);
+
+        this.averageCost = totalCost / sharesOwned;
+        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+
+        this.totalReturn = totalCost - (stockPrice * sharesOwned);
+        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+
         getUserInfo();
         updateInfo();
         Button buyButton = findViewById(R.id.buyBtn);
