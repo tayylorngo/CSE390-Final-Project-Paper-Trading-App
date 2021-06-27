@@ -59,7 +59,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
         holder.stockItemSharesLabel.setText(shares + " shares");
 
-        String API_KEY = "4b2958e32e37bf03794dad84718b3219";
+        String API_KEY = "0344862ce6e643d4a1bb3bca12776a36";
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
