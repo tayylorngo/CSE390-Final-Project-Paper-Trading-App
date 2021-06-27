@@ -101,6 +101,9 @@ public class SellStockDialog extends AppCompatDialogFragment {
                 if (amountToSellInput.getText().toString().isEmpty() || Double.parseDouble(amountToSellInput.getText().toString()) == 0){
                     return;
                 }
+                if(Double.parseDouble(amountToSellInput.getText().toString()) > sharesOwned){
+                    return;
+                }
                 listener.applyTexts(Double.parseDouble(amountToSellInput.getText().toString()), stockName);
             }
         });
