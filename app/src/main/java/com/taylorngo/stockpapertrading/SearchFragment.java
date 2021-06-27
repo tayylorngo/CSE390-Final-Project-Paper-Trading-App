@@ -4,6 +4,8 @@ package com.taylorngo.stockpapertrading;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,20 +36,38 @@ public class SearchFragment extends Fragment {
     private String stockTicker;
     private String stockName;
     private double stockPrice;
+    private double sharesOwned;
+    private double totalCost;
     private RequestQueue mQueue;
     private Context mContext;
+
+    private SQLiteDatabase rDatabase;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         mContext = view.getContext();
+
         EditText stockInput = view.findViewById(R.id.stockSearchForm);
         Button searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stockTicker = stockInput.getText().toString();
+                StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
+                String selectQuery = "SELECT * FROM " + StocksContract.StockEntry.TABLE_NAME;
+                rDatabase = dbHelper.getReadableDatabase();
+                Cursor cursor = rDatabase.rawQuery(selectQuery, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String temp = cursor.getString(1);
+                    if(temp.equals(stockTicker)){
+                        sharesOwned = cursor.getDouble(2);
+                        totalCost = cursor.getDouble(3);
+                    }
+                    cursor.moveToNext();
+                }
                 getStockData();
                 closeKeyboard();
             }
@@ -81,6 +101,8 @@ public class SearchFragment extends Fragment {
                             intent.putExtra("stockName", stockName);
                             intent.putExtra("stockPrice", stockPrice);
                             intent.putExtra("totalBalance", currBalance);
+                            intent.putExtra("sharesOwned", sharesOwned);
+                            intent.putExtra("totalCost", totalCost);
                             startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();

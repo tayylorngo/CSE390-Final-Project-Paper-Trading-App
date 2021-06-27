@@ -80,7 +80,9 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("totalCost", String.valueOf(currTotalCost));
                                 editor.apply();
-                                holder.stockItemPriceLabel.setText("$" + stock.getDouble("price") * shares);
+                                double total = stock.getDouble("price") * shares;
+                                total = Math.round(total * 100.0) / 100.0;
+                                holder.stockItemPriceLabel.setText("$" + total);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

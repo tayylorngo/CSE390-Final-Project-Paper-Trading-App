@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNav = findViewById(R.id.navbar);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+//        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.apply();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
     }
 

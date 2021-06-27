@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class StockDataActivity extends AppCompatActivity implements BuyStockDialog.BuyStockDialogListener {
+public class StockDataActivity extends AppCompatActivity implements BuyStockDialog.BuyStockDialogListener, SellStockDialog.SellStockDialogListener {
 
     private static final String SHARED_PREFS = "sharedPrefs";
 
@@ -21,12 +21,14 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     private String stockTicker;
     private double stockPrice;
     private double totalBalance;
-    private int sharesOwned;
+    private double sharesOwned;
+    private double totalCost;
     private double totalReturn;
     private double averageCost;
 
     private SQLiteDatabase mDatabase;
     private BuyStockDialog buyStockDialog;
+    private SellStockDialog sellStockDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         this.stockName = intent.getStringExtra("stockName");
         this.stockPrice = intent.getDoubleExtra("stockPrice", 0.0);
         this.totalBalance = intent.getDoubleExtra("totalBalance", 0.0);
+        this.sharesOwned = intent.getDoubleExtra("sharesOwned", 0.0);
+        this.totalCost = intent.getDoubleExtra("totalCost", 0.0);
         getUserInfo();
         updateInfo();
         Button buyButton = findViewById(R.id.buyBtn);
@@ -83,8 +87,8 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     }
 
     public void openSellSharesDialog(){
-
-
+        sellStockDialog = new SellStockDialog(totalBalance, stockPrice, sharesOwned, stockTicker);
+        sellStockDialog.show(getSupportFragmentManager(), "Sell " + stockTicker);
     }
 
     @Override
@@ -131,4 +135,47 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     }
 
 
+    @Override
+    public void applyTexts(double amount, String stockName) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        String name = this.stockTicker;
+        double totalSellValue = amount * stockPrice;
+        totalSellValue = Math.round(totalSellValue * 100.0) / 100.0;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        double newBalance = currBalance + totalSellValue;
+        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        editor.putString("balance", String.valueOf(newBalance));
+        double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
+        System.out.println(currTotalCost);
+        currTotalCost -= totalSellValue;
+        System.out.println(currTotalCost);
+        editor.putString("totalCost", String.valueOf(currTotalCost));
+        editor.apply();
+
+        double sharesRemaining = sharesOwned - amount;
+        sharesRemaining = Math.round(sharesRemaining * 100.0) / 100.0;
+
+        if(sharesRemaining == 0){
+            mDatabase.delete(StocksContract.StockEntry.TABLE_NAME,
+                    "name=?", new String[]{stockTicker});
+        }
+        else{
+            ContentValues cv = new ContentValues();
+            cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
+            cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, sharesRemaining);
+            cv.put(StocksContract.StockEntry.COLUMN_COST, (totalCost -  totalSellValue));
+
+            mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
+        }
+
+        HomeFragment.mAdapter.swapCursor(mDatabase.query(
+                StocksContract.StockEntry.TABLE_NAME,
+                null, null, null, null, null,
+                StocksContract.StockEntry.COLUMN_TIMESTAMP + " DESC"
+        ));
+        Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
+        toast.show();
+        sellStockDialog.dismiss();
+    }
 }
