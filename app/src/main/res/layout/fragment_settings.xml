@@ -43,22 +43,22 @@
             android:text="Default" />
 
         <RadioButton
-            android:id="@+id/priceRadioBtn"
+            android:id="@+id/nameRadioBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last Price" />
+            android:text="Name" />
 
         <RadioButton
-            android:id="@+id/profitRadioButton"
+            android:id="@+id/numSharesRadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total Return" />
+            android:text="Number of Shares" />
 
         <RadioButton
-            android:id="@+id/equityRadioBtn"
+            android:id="@+id/totalCostRadioBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Equity" />
+            android:text="Total Cost" />
     </RadioGroup>
 
     <TextView

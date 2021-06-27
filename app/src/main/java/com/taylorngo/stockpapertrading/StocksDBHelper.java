@@ -24,7 +24,6 @@ public class StocksDBHelper extends SQLiteOpenHelper {
                 StockEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 StockEntry.COLUMN_AMOUNT + " DOUBLE NOT NULL, " +
                 StockEntry.COLUMN_COST + " DOUBLE NOT NULL, " +
-                StockEntry.COLUMN_LASTPRICE + "DOUBLE NOT NULL, " +
                 StockEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
         db.execSQL(SQLITE_CREATE_STOCKSLIST_TABLE);

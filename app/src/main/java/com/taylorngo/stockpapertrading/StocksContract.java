@@ -12,12 +12,5 @@ public class StocksContract {
         public static final String COLUMN_AMOUNT = "amount";
         public static final String COLUMN_COST = "cost";
         public static final String COLUMN_TIMESTAMP = "timestamp";
-        public static final String COLUMN_LASTPRICE = "lastPrice";
     }
-
-
-
-
-
-
 }

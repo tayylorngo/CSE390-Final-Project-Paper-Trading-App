@@ -26,9 +26,9 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         RadioButton defaultRadio = view.findViewById(R.id.defaultRadioBtn);
-        RadioButton lastPriceRadio = view.findViewById(R.id.priceRadioBtn);
-        RadioButton totalReturnRadio = view.findViewById(R.id.profitRadioButton);
-        RadioButton equityRadio = view.findViewById(R.id.equityRadioBtn);
+        RadioButton nameRadio = view.findViewById(R.id.nameRadioBtn);
+        RadioButton numSharesRadio = view.findViewById(R.id.numSharesRadioButton);
+        RadioButton totalCostRadio = view.findViewById(R.id.totalCostRadioBtn);
 
         Button addFundsButton = view.findViewById(R.id.addFundsButton);
         addFundsButton.setOnClickListener(new View.OnClickListener() {
@@ -43,14 +43,14 @@ public class SettingsFragment extends Fragment {
            case "Default":
                defaultRadio.setChecked(true);
                break;
-           case "Last Price":
-               lastPriceRadio.setChecked(true);
+           case "Name":
+               nameRadio.setChecked(true);
                break;
-           case "Total Return":
-               totalReturnRadio.setChecked(true);
+           case "Number of Shares":
+               numSharesRadio.setChecked(true);
                break;
-           case "Your Equity":
-               equityRadio.setChecked(true);
+           case "Total Cost":
+               totalCostRadio.setChecked(true);
                break;
            default:
                break;

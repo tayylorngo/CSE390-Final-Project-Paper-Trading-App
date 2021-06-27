@@ -37,9 +37,10 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private SQLiteDatabase mDatabase;
-    private SQLiteDatabase rDatabase;
-
     static StocksAdapter mAdapter;
+
+    private String sortBy;
+    private String sortOrder;
 
     @Nullable
     @Override
@@ -58,7 +59,7 @@ public class HomeFragment extends Fragment {
         double totalCost = 0.0;
         StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
         String selectQuery = "SELECT * FROM " + StocksContract.StockEntry.TABLE_NAME;
-        rDatabase = dbHelper.getReadableDatabase();
+        SQLiteDatabase rDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = rDatabase.rawQuery(selectQuery, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -74,6 +75,10 @@ public class HomeFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
+        sortBy = sharedPreferences.getString("sortBy", "");
+        sortOrder = sharedPreferences.getString("sortOrder", "");
+        sortList(sortBy, sortOrder);
+
         totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         actualBalance = totalBalance + totalStocksPrice;
@@ -84,6 +89,40 @@ public class HomeFragment extends Fragment {
         profit = Math.round(profit * 100.0) / 100.0;
         profitLabel.setText("Total Profit/Loss: $" + profit);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getView().getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        sortBy = sharedPreferences.getString("sortBy", "");
+        sortOrder = sharedPreferences.getString("sortOrder", "");
+        sortList(sortBy, sortOrder);
+    }
+
+    public void sortList(String sortBy, String sortOrder){
+        if(sortOrder.equals("Ascending")){
+            sortOrder = " ASC";
+        }
+        else{
+            sortOrder = " DESC";
+        }
+        if(sortBy.equals("Name")){
+            sortBy = StocksContract.StockEntry.COLUMN_NAME;
+        }
+        else if(sortBy.equals("Number Of Shares")){
+            sortBy = StocksContract.StockEntry.COLUMN_AMOUNT;
+        }
+        else if(sortBy.equals("Total Cost")){
+            sortBy = StocksContract.StockEntry.COLUMN_COST;
+        }
+        else{
+            sortBy = StocksContract.StockEntry.COLUMN_TIMESTAMP;
+        }
+        Cursor temp = mDatabase.query(StocksContract.StockEntry.TABLE_NAME,
+                null, null, null, null, null,
+                sortBy +  sortOrder);
+        mAdapter.swapCursor(temp);
     }
 
     private Cursor getAllItems(){
