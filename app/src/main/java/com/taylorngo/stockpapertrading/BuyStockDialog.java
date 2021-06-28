@@ -55,10 +55,10 @@ public class BuyStockDialog extends AppCompatDialogFragment {
         });
 
         currBalanceLabel = view.findViewById(R.id.availableBalanceLabel);
-        currBalanceLabel.setText("Amount available to purchase $: " + balance);
+        currBalanceLabel.setText("Amount available to purchase: $" + balance);
 
         pricePerShareLabel = view.findViewById(R.id.pricePerShareLabel);
-        pricePerShareLabel.setText("Price per share (approx.) $" + stockPrice);
+        pricePerShareLabel.setText("Price per share (approx.): $" + stockPrice);
 
         totalCostLabel = view.findViewById(R.id.totalOrderCostLabel);
         totalCostLabel.setText("Total Cost: $" + 0.0);

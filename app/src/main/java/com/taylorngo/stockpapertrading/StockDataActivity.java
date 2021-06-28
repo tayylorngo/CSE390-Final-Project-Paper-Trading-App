@@ -52,7 +52,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         this.averageCost = totalCost / sharesOwned;
         this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
 
-        this.totalReturn = totalCost - (stockPrice * sharesOwned);
+        this.totalReturn = (stockPrice * sharesOwned) - totalCost;
         this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
 
         getUserInfo();
@@ -77,7 +77,12 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         TextView sharesOwnedLabel = findViewById(R.id.sharesOwnedLabel);
         sharesOwnedLabel.setText("Shares Owned: " + sharesOwned);
         TextView totalReturnLabel = findViewById(R.id.totalReturnLabel);
-        totalReturnLabel.setText("Total Return: $" + totalReturn);
+        if(totalReturn < 0){
+            totalReturnLabel.setText("Total Return: -$" + Math.abs(totalReturn));
+        }
+        else{
+            totalReturnLabel.setText("Total Return: $" + totalReturn);
+        }
         TextView averageCostLabel = findViewById(R.id.averageCostLabel);
         averageCostLabel.setText("Average Cost: $" + averageCost);
     }
@@ -133,11 +138,11 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         sharesOwned += amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
-        this.totalCost = currTotalCost;
+        this.totalCost += cost;
         this.averageCost = totalCost / sharesOwned;
         this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
 
-        this.totalReturn = totalCost - (stockPrice * sharesOwned);
+        this.totalReturn = (stockPrice * sharesOwned) - totalCost;
         this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
 
         boolean ownedStock = false;
@@ -195,12 +200,17 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         sharesOwned -= amount;
         sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
 
-        this.totalCost = currTotalCost;
-        this.averageCost = totalCost / sharesOwned;
-        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
-
-        this.totalReturn = totalCost - (stockPrice * sharesOwned);
-        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+        this.totalCost -= (stockPrice * amount);
+        if(sharesOwned == 0){
+            this.averageCost = 0.0;
+            this.totalReturn = 0.0;
+        }
+        else{
+            this.averageCost = totalCost / sharesOwned;
+            this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+            this.totalReturn = (stockPrice * sharesOwned) - totalCost;
+            this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+        }
 
         if(sharesOwned == 0){
             mDatabase.delete(StocksContract.StockEntry.TABLE_NAME,
@@ -210,9 +220,11 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
             ContentValues cv = new ContentValues();
             cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
             cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, sharesOwned);
-            cv.put(StocksContract.StockEntry.COLUMN_COST, (totalCost -  totalSellValue));
+            cv.put(StocksContract.StockEntry.COLUMN_COST, totalCost);
             mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
         }
+
+        // current price - average cost = profit
 
         HomeFragment.mAdapter.swapCursor(mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,
