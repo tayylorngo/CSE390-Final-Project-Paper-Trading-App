@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -31,7 +32,10 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
     private Context mContext;
     private Cursor mCursor;
     private RequestQueue mQueue;
+    private double sharesOwned;
+    private double totalCost;
 
+    private SQLiteDatabase rDatabase;
     private static final String SHARED_PREFS = "sharedPrefs";
     SharedPreferences sharedPreferences;
 
@@ -97,6 +101,60 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
             }
         });
         mQueue.add(request);
+
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StocksDBHelper dbHelper = new StocksDBHelper(v.getContext());
+                String selectQuery = "SELECT * FROM " + StocksContract.StockEntry.TABLE_NAME;
+                rDatabase = dbHelper.getReadableDatabase();
+                Cursor cursor = rDatabase.rawQuery(selectQuery, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    String temp = cursor.getString(1);
+                    if(temp.equals(ticker)){
+                        sharesOwned = cursor.getDouble(2);
+                        totalCost = cursor.getDouble(3);
+                    }
+                    cursor.moveToNext();
+                }
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                String API_KEY = "0344862ce6e643d4a1bb3bca12776a36";
+                String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
+                        new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                try {
+                                    if(response.length() == 0){
+                                        Toast toast = Toast.makeText(mContext, "Asset not found.", Toast.LENGTH_SHORT);
+                                        toast.show();
+                                        return;
+                                    }
+                                    for(int i = 0; i < response.length(); i++){
+                                        JSONObject stock = response.getJSONObject(i);
+                                        Intent intent = new Intent(mContext, StockDataActivity.class);
+                                        intent.putExtra("stockTicker", ticker);
+                                        intent.putExtra("stockName", stock.getString("name"));
+                                        intent.putExtra("stockPrice", stock.getDouble("price"));
+                                        intent.putExtra("totalBalance", Double.parseDouble(sharedPreferences.getString("balance", "0.0")));
+                                        intent.putExtra("sharesOwned", sharesOwned);
+                                        intent.putExtra("totalCost", totalCost);
+                                        mContext.startActivity(intent);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+                mQueue.add(request);
+            }
+        });
     }
 
     @Override
@@ -118,12 +176,14 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         private TextView stockItemNameLabel;
         private TextView stockItemSharesLabel;
         private TextView stockItemPriceLabel;
+        private ConstraintLayout mainLayout;
 
         public StocksViewHolder(View itemView) {
             super(itemView);
             stockItemNameLabel = itemView.findViewById(R.id.stockItemNameLabel);
             stockItemPriceLabel = itemView.findViewById(R.id.stockItemPriceLabel);
             stockItemSharesLabel = itemView.findViewById(R.id.stockItemSharesLabel);
+            mainLayout = itemView.findViewById(R.id.stock_item);
         }
     }
 }

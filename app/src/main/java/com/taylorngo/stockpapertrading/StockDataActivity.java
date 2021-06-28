@@ -149,7 +149,6 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
                 null, null, null, null, null,
                 StocksContract.StockEntry.COLUMN_TIMESTAMP + " DESC"
         ));
-
         Toast toast = Toast.makeText(this, "Purchased successfully", Toast.LENGTH_SHORT);
         toast.show();
     }

@@ -5,11 +5,6 @@
     android:padding="15sp"
     android:orientation="vertical">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
     <TextView
         android:id="@+id/totalLabel"
         android:layout_width="236dp"
