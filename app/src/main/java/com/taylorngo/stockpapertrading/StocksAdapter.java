@@ -65,7 +65,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
         holder.stockItemSharesLabel.setText(shares + " shares");
 
-        String API_KEY = "0344862ce6e643d4a1bb3bca12776a36";
+        String API_KEY = mContext.getString(R.string.api_key);
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                 new Response.Listener<JSONArray>() {
@@ -118,8 +118,9 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                     }
                     cursor.moveToNext();
                 }
+                rDatabase.close();
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                String API_KEY = "0344862ce6e643d4a1bb3bca12776a36";
+                String API_KEY = mContext.getString(R.string.api_key);
                 String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
                 JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, urlString, null,
                         new Response.Listener<JSONArray>() {
