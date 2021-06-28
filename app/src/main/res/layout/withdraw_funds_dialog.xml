@@ -17,9 +17,15 @@
         android:hint="Enter amount"
         />
 
+    <TextView
+        android:id="@+id/withdrawDialogCurrBalanceLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Withdrawable Balance: $" />
+
     <Button
         android:id="@+id/withdrawFundsConfirmBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Funds" />
+        android:text="Withdraw Funds" />
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,9 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
             }
         });
 
+        TextView currBalanceLabel = view.findViewById(R.id.withdrawDialogCurrBalanceLabel);
+        currBalanceLabel.setText("Withdrawable Balance: $" + currBalance);
+
         EditText fundsInput = view.findViewById(R.id.withdrawFundsInput);
         fundsInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,8 +73,8 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
                     return;
                 }
                 if(Double.parseDouble(fundsInput.getText().toString()) > currBalance){
-                    Toast toast = Toast.makeText(getContext(), "Not enough funds", Toast.LENGTH_SHORT);
-                    toast.show();
+//                    Toast toast = Toast.makeText(getContext(), "Not enough funds", Toast.LENGTH_SHORT);
+//                    toast.show();
                     return;
                 }
                 listener.applyTexts(Double.parseDouble(fundsInput.getText().toString()), "holder");
