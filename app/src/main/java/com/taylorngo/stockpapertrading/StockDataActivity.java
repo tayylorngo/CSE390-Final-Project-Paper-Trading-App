@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     private double averageCost;
 
     private SQLiteDatabase mDatabase;
+    private SQLiteDatabase rDatabase;
     private BuyStockDialog buyStockDialog;
     private SellStockDialog sellStockDialog;
 
@@ -37,6 +39,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
 
         StocksDBHelper dbHelper = new StocksDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
+        rDatabase = dbHelper.getReadableDatabase();
 
         Intent intent = getIntent();
         this.stockTicker = intent.getStringExtra("stockTicker");
@@ -137,12 +140,32 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         this.totalReturn = totalCost - (stockPrice * sharesOwned);
         this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
 
+        boolean ownedStock = false;
+        double totalCostOfStock = 0;
+        String selectQuery = "SELECT * FROM " + StocksContract.StockEntry.TABLE_NAME;
+        Cursor cursor = rDatabase.rawQuery(selectQuery, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String temp = cursor.getString(1);
+            if(temp.equals(stockTicker)){
+                ownedStock = true;
+                totalCostOfStock = cursor.getDouble(3);
+            }
+            cursor.moveToNext();
+        }
+
         ContentValues cv = new ContentValues();
         cv.put(StocksContract.StockEntry.COLUMN_NAME, name);
-        cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
-        cv.put(StocksContract.StockEntry.COLUMN_COST, cost);
-
-        mDatabase.insert(StocksContract.StockEntry.TABLE_NAME, null, cv);
+        if(!ownedStock){
+            cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, amount);
+            cv.put(StocksContract.StockEntry.COLUMN_COST, cost);
+            mDatabase.insert(StocksContract.StockEntry.TABLE_NAME, null, cv);
+        }
+        else{
+            cv.put(StocksContract.StockEntry.COLUMN_AMOUNT, sharesOwned);
+            cv.put(StocksContract.StockEntry.COLUMN_COST, totalCostOfStock + cost);
+            mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
+        }
 
         HomeFragment.mAdapter.swapCursor(mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,
@@ -153,9 +176,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         toast.show();
     }
 
-
-    @Override
-    public void applyTexts(double amount, String stockName) {
+    public void sellStock(double amount){
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         String name = this.stockTicker;
@@ -200,6 +221,12 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         ));
         Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+
+    @Override
+    public void applyTexts(double amount, String stockName) {
+        sellStock(amount);
         getUserInfo();
         sellStockDialog.dismiss();
     }

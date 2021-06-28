@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,8 +90,17 @@ public class HomeFragment extends Fragment {
         TextView profitLabel = view.findViewById(R.id.profitLossLabel);
         double profit = (totalStocksPrice - totalCost);
         profit = Math.round(profit * 100.0) / 100.0;
-        profitLabel.setText("Total Profit/Loss: $" + profit);
-
+        if(profit < 0){
+            profitLabel.setText("Total Profit/Loss: -$" + Math.abs(profit));
+            profitLabel.setTextColor(Color.RED);
+        }
+        else if(profit == 0){
+            profitLabel.setText("Total Profit/Loss: $" + Math.abs(profit));
+        }
+        else{
+            profitLabel.setText("Total Profit/Loss: $" + profit);
+            profitLabel.setTextColor(Color.GREEN);
+        }
         FloatingActionButton refreshBtn = view.findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
