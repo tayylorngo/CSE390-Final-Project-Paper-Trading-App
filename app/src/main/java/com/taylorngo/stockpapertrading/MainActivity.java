@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
-        Toast toast = Toast.makeText(this, "Added $" + String.valueOf(amount), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, "Added $" + amount, Toast.LENGTH_SHORT);
         toast.show();
         currFrag.closeAddDialog();
     }
@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
-//        Toast toast = Toast.makeText(this, "Withdrew $" + amount, Toast.LENGTH_SHORT);
-//        toast.show();
+        Toast toast = Toast.makeText(this, "Withdrew $" + amount, Toast.LENGTH_SHORT);
+        toast.show();
         currFrag.closeWithdrawDialog();
     }
 }
