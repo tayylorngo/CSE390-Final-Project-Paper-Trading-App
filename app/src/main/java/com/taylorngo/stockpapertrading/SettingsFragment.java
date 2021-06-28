@@ -20,6 +20,7 @@ public class SettingsFragment extends Fragment {
 
     public static final String SHARED_PREFS = "sharedPrefs";
     private AddFundsDialog addFundsDialog;
+    private WithdrawFundsDialog withdrawFundsDialog;
 
     @Nullable
     @Override
@@ -35,6 +36,14 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openAddFundsDialog();
+            }
+        });
+
+        Button withdrawFundsButton = view.findViewById(R.id.withdrawFundsBtn);
+        withdrawFundsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openWithdrawFundsDialog();
             }
         });
 
@@ -97,8 +106,18 @@ public class SettingsFragment extends Fragment {
         addFundsDialog.show(getActivity().getSupportFragmentManager(), "Add Funds");
     }
 
-    public void closeDialog(){
+    public void openWithdrawFundsDialog(){
+        SharedPreferences sharedPreferences = getView().getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        withdrawFundsDialog = new WithdrawFundsDialog(currBalance);
+        withdrawFundsDialog.show(getActivity().getSupportFragmentManager(), "Withdraw Funds");
+    }
+
+    public void closeAddDialog(){
         this.addFundsDialog.dismiss();
     }
 
+    public void closeWithdrawDialog(){
+        this.withdrawFundsDialog.dismiss();
+    }
 }

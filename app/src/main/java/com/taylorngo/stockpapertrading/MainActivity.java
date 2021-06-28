@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity implements AddFundsDialog.AddFundsDialogListener {
+public class MainActivity extends AppCompatActivity implements AddFundsDialog.AddFundsDialogListener, WithdrawFundsDialog.WithdrawFundsDialogListener {
     private static final String SHARED_PREFS = "sharedPrefs";
     private SettingsFragment currFrag;
 
@@ -68,6 +68,20 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         editor.apply();
         Toast toast = Toast.makeText(this, "Added $" + String.valueOf(amount), Toast.LENGTH_SHORT);
         toast.show();
-        currFrag.closeDialog();
+        currFrag.closeAddDialog();
+    }
+
+    @Override
+    public void applyTexts(double amount, String holder) {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        double newBalance = currBalance - amount;
+        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("balance", String.valueOf(newBalance));
+        editor.apply();
+        Toast toast = Toast.makeText(this, "Withdrew $" + amount, Toast.LENGTH_SHORT);
+        toast.show();
+        currFrag.closeWithdrawDialog();
     }
 }
