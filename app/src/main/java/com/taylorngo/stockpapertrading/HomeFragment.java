@@ -85,12 +85,12 @@ public class HomeFragment extends Fragment {
         totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         actualBalance = totalBalance + totalStocksPrice;
-        actualBalance = Math.round(actualBalance * 100.0) / 100.0;
+        actualBalance = MainActivity.round(actualBalance);
         balanceLabel.setText("$" + (actualBalance));
         TextView profitLabel = view.findViewById(R.id.profitLossLabel);
         double profit = (totalStocksPrice - totalCost);
         profit += Double.parseDouble(sharedPreferences.getString("profit", "0.0"));
-        profit = Math.round(profit * 100.0) / 100.0;
+        profit = MainActivity.round(profit);
         if(profit < 0){
             profitLabel.setText("Total Profit/Loss: -$" + Math.abs(profit));
             profitLabel.setTextColor(Color.RED);

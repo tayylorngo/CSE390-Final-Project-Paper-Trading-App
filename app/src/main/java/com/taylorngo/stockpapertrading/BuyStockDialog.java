@@ -79,7 +79,7 @@ public class BuyStockDialog extends AppCompatDialogFragment {
                     return;
                 }
                 double total = stockPrice * Double.parseDouble(amountToOrder.getText().toString());
-                total = Math.round(total * 100.0) / 100.0;
+                total = MainActivity.round(total);
                 totalCostLabel.setText("Total Cost: $" + total);
             }
         });

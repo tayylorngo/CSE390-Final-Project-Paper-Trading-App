@@ -86,7 +86,7 @@ public class SellStockDialog extends AppCompatDialogFragment {
                     return;
                 }
                 double total = stockPrice * Double.parseDouble(amountToSellInput.getText().toString());
-                total = Math.round(total * 100.0) / 100.0;
+                total = MainActivity.round(total);
                 totalSellValueLabel.setText("Total: $" + total);
             }
         });

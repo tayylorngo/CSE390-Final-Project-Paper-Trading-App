@@ -82,12 +82,12 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                                 String currTotalCostString = sharedPreferences.getString("totalCost", "0.0");
                                 double currTotalCost = Double.parseDouble(currTotalCostString);
                                 currTotalCost += stock.getDouble("price") * shares;
-                                currTotalCost = Math.round(currTotalCost * 100.0) / 100.0;
+                                currTotalCost = MainActivity.round(currTotalCost);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("totalCost", String.valueOf(currTotalCost));
                                 editor.apply();
                                 double total = stock.getDouble("price") * shares;
-                                total = Math.round(total * 100.0) / 100.0;
+                                total = MainActivity.round(total);
                                 holder.stockItemPriceLabel.setText("$" + total);
                             }
                         } catch (JSONException e) {
