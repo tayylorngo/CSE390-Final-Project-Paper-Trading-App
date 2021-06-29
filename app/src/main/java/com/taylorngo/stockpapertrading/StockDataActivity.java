@@ -50,10 +50,10 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         this.totalCost = intent.getDoubleExtra("totalCost", 0.0);
 
         this.averageCost = totalCost / sharesOwned;
-        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+        this.averageCost = MainActivity.round(this.averageCost);
 
         this.totalReturn = (stockPrice * sharesOwned) - totalCost;
-        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+        this.totalReturn = MainActivity.round(this.totalReturn);
 
         getUserInfo();
         updateInfo();
@@ -127,7 +127,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         double cost = amount * stockPrice;
         SharedPreferences.Editor editor = sharedPreferences.edit();
         double newBalance = currBalance - cost;
-        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        newBalance = MainActivity.round(newBalance);
         totalBalance = newBalance;
         editor.putString("balance", String.valueOf(newBalance));
         double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
@@ -136,14 +136,14 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         editor.apply();
 
         sharesOwned += amount;
-        sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
+        sharesOwned = MainActivity.round(sharesOwned);
 
         this.totalCost += cost;
         this.averageCost = totalCost / sharesOwned;
-        this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+        this.averageCost = MainActivity.round(this.averageCost);
 
         this.totalReturn = (stockPrice * sharesOwned) - totalCost;
-        this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+        this.totalReturn = MainActivity.round(this.totalReturn);
 
         boolean ownedStock = false;
         double totalCostOfStock = 0;
@@ -186,19 +186,26 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         String name = this.stockTicker;
         double totalSellValue = amount * stockPrice;
-        totalSellValue = Math.round(totalSellValue * 100.0) / 100.0;
+        totalSellValue = MainActivity.round(totalSellValue);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         double newBalance = currBalance + totalSellValue;
-        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        newBalance = MainActivity.round(newBalance);
         totalBalance = newBalance;
         editor.putString("balance", String.valueOf(newBalance));
         double currTotalCost = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
-        currTotalCost -= totalSellValue;
+        currTotalCost -= (averageCost * amount);
+        currTotalCost = MainActivity.round(currTotalCost);
         editor.putString("totalCost", String.valueOf(currTotalCost));
-        editor.apply();
 
         sharesOwned -= amount;
-        sharesOwned = Math.round(sharesOwned * 100.0) / 100.0;
+        sharesOwned = MainActivity.round(sharesOwned);
+
+        double oldProfit = Double.parseDouble(sharedPreferences.getString("profit", "0.0"));
+        double profit = this.stockPrice - this.averageCost;
+        profit += oldProfit;
+        profit = MainActivity.round(profit);
+        editor.putString("profit", String.valueOf(profit));
+        editor.apply();
 
         this.totalCost -= (stockPrice * amount);
         if(sharesOwned == 0){
@@ -207,9 +214,9 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         }
         else{
             this.averageCost = totalCost / sharesOwned;
-            this.averageCost = Math.round(this.averageCost * 100.0) / 100.0;
+            this.averageCost = MainActivity.round(this.averageCost);
             this.totalReturn = (stockPrice * sharesOwned) - totalCost;
-            this.totalReturn = Math.round(this.totalReturn * 100.0) / 100.0;
+            this.totalReturn = MainActivity.round(this.totalReturn);
         }
 
         if(sharesOwned == 0){
@@ -224,7 +231,6 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
             mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
         }
 
-        // current price - average cost = profit
 
         HomeFragment.mAdapter.swapCursor(mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,
@@ -234,7 +240,6 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
         toast.show();
     }
-
 
     @Override
     public void applyTexts(double amount, String stockName) {

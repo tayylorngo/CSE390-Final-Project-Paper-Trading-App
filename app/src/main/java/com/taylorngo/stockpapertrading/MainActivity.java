@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         double newBalance = amount + currBalance;
-        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        newBalance = round(newBalance);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
@@ -76,12 +76,16 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         double newBalance = currBalance - amount;
-        newBalance = Math.round(newBalance * 100.0) / 100.0;
+        newBalance = round(newBalance);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("balance", String.valueOf(newBalance));
         editor.apply();
         Toast toast = Toast.makeText(this, "Withdrew $" + amount, Toast.LENGTH_SHORT);
         toast.show();
         currFrag.closeWithdrawDialog();
+    }
+
+    public static double round(double num){
+        return Math.round(num * 100.0) / 100.0;
     }
 }
