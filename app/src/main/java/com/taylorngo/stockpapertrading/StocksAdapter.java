@@ -1,6 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,11 +22,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * The StocksAdapter class acts as an Adapter for the RecyclerView to show
+ * the list of the user's assets.
+ *
+ * @author Taylor Ngo
+ */
 public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksViewHolder> {
     private Context mContext;
     private Cursor mCursor;
@@ -39,11 +43,25 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
     private static final String SHARED_PREFS = "sharedPrefs";
     SharedPreferences sharedPreferences;
 
+    /**
+     * Constructor to create the StocksAdapter
+     *
+     * @param context Context
+     * @param cursor Cursor
+     */
     public StocksAdapter(Context context, Cursor cursor){
         mContext = context;
         mCursor = cursor;
     }
 
+    /**
+     * This method creates the view for the RecyclerView.
+     *
+     * @param parent Parent
+     * @param viewType ViewType
+     *
+     * @return A view representing the RecyclerView
+     */
     @Override
     public StocksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.stock_item, parent, false);
@@ -55,6 +73,13 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         return new StocksViewHolder(itemView);
     }
 
+    /**
+     * This method creates the view and updates the values for
+     * each individual asset in the RecyclerView.
+     *
+     * @param holder holder
+     * @param position position in the list.
+     */
     @Override
     public void onBindViewHolder(StocksAdapter.StocksViewHolder holder, int position) {
         if(!mCursor.moveToPosition(position)){
@@ -103,6 +128,11 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         mQueue.add(request);
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            /**
+             * This method opens an intent showing
+             * the stock data selected in the list.
+             * @param v view
+             */
             @Override
             public void onClick(View v) {
                 StocksDBHelper dbHelper = new StocksDBHelper(v.getContext());
@@ -158,11 +188,23 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         });
     }
 
+    /**
+     * This method gets the item count of
+     * the items in the database.
+     *
+     * @return The amount of items in the database.
+     */
     @Override
     public int getItemCount() {
         return mCursor.getCount();
     }
 
+    /**
+     * This method updates the RecyclerView
+     * when data is altered in the database.
+     *
+     * @param newCursor newCursor
+     */
     public void swapCursor(Cursor newCursor){
         if(mCursor != null){
             mCursor.close();
@@ -173,12 +215,22 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         }
     }
 
+    /**
+     * This class acts the ViewHolder for the RecyclerView.
+     *
+     * @author Taylor Ngo
+     */
     public class StocksViewHolder extends RecyclerView.ViewHolder {
         private TextView stockItemNameLabel;
         private TextView stockItemSharesLabel;
         private TextView stockItemPriceLabel;
         private ConstraintLayout mainLayout;
 
+        /**
+         * Constructor to create the StocksViewHolder
+         *
+         * @param itemView itemView
+         */
         public StocksViewHolder(View itemView) {
             super(itemView);
             stockItemNameLabel = itemView.findViewById(R.id.stockItemNameLabel);

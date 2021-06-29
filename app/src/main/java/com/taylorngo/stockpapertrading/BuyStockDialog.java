@@ -1,5 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,12 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import org.jetbrains.annotations.NotNull;
-
+/**
+ * The BuyStockDialog class implements a dialog for when
+ * the user wants to purchase an asset.
+ *
+ * @author Taylor Ngo
+ */
 public class BuyStockDialog extends AppCompatDialogFragment {
 
     private BuyStockDialogListener listener;
@@ -31,10 +34,21 @@ public class BuyStockDialog extends AppCompatDialogFragment {
     private double stockPrice;
     private String stockName;
 
+    /**
+     * Default constructor used to create the BuyStockDialog
+     */
     public BuyStockDialog(){
         super();
     }
 
+    /**
+     * Constructor used to create BuyStockDialog with
+     * values of balance, stockPrice, and stockName.
+     *
+     * @param balance User balance
+     * @param stockPrice Current price of the stock.
+     * @param stockName Name of the stock.
+     */
     public BuyStockDialog(double balance, double stockPrice, String stockName){
         super();
         this.balance = balance;
@@ -42,6 +56,12 @@ public class BuyStockDialog extends AppCompatDialogFragment {
         this.stockName = stockName;
     }
 
+    /**
+     * This method creates the BuyStockDialog.
+     *
+     * @param savedInstanceState savedInstanceState
+     * @return A Dialog representing the BuyStockDialog.
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -97,6 +117,10 @@ public class BuyStockDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Overridden method to assign the BuyStockDialogListener
+     * @param context Context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -108,6 +132,10 @@ public class BuyStockDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface represents the BuyStockDialogListener
+     * and blueprints the function when the user purchases an asset.
+     */
     public interface BuyStockDialogListener {
         void applyTexts(double amount);
     }

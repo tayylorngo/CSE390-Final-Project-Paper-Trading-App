@@ -1,6 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -11,32 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * The HomeFragment class implements the HomeScreen of the application
+ * that shows the user account value and list of the user's assets.
+ *
+ * @author Taylor Ngo
+ */
 public class HomeFragment extends Fragment {
     public static final String SHARED_PREFS = "sharedPrefs";
     private SQLiteDatabase mDatabase;
@@ -45,6 +32,16 @@ public class HomeFragment extends Fragment {
     private String sortBy;
     private String sortOrder;
 
+    /**
+     * This method creates the View for the HomeFragment which includes
+     * the TextViews for account value, profit/loss, buying power, and
+     * the RecyclerView for the user's assets.
+     *
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -113,6 +110,9 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This method sorts the list onResume()
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -122,6 +122,13 @@ public class HomeFragment extends Fragment {
         sortList(sortBy, sortOrder);
     }
 
+    /**
+     * This method sorts the RecyclerView based on
+     * data from the SettingsFragment
+     *
+     * @param sortBy Sorting criteria
+     * @param sortOrder Sort order(ascending or descending)
+     */
     public void sortList(String sortBy, String sortOrder){
         if(sortOrder.equals("Ascending")){
             sortOrder = " ASC";
@@ -147,6 +154,11 @@ public class HomeFragment extends Fragment {
         mAdapter.swapCursor(temp);
     }
 
+    /**
+     * This method queries all the items in the database.
+     *
+     * @return A Cursor object of all the items in the database.
+     */
     private Cursor getAllItems(){
         return mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,

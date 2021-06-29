@@ -1,5 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * The StockDataActivity class implements the Activity page where the
+ * user can view an asset's data including price, their ownership, and
+ * the returns they have on the asset.
+ *
+ * @author Taylor Ngo
+ */
 public class StockDataActivity extends AppCompatActivity implements BuyStockDialog.BuyStockDialogListener, SellStockDialog.SellStockDialogListener {
 
     private static final String SHARED_PREFS = "sharedPrefs";
@@ -32,6 +40,12 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
     private BuyStockDialog buyStockDialog;
     private SellStockDialog sellStockDialog;
 
+    /**
+     * This method creates the activity and initalizes
+     * all TextViews and button functionality.
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +87,10 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         });
     }
 
+    /**
+     * This method sets the TextViews to the user's information
+     * such as asset ownership and total returns.
+     */
     public void getUserInfo(){
         TextView sharesOwnedLabel = findViewById(R.id.sharesOwnedLabel);
         sharesOwnedLabel.setText("Shares Owned: " + sharesOwned);
@@ -87,6 +105,9 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         averageCostLabel.setText("Average Cost: $" + averageCost);
     }
 
+    /**
+     * This method updates the TextViews of the asset name, ticker, and price.
+     */
     public void updateInfo(){
         TextView stockNameLabel = findViewById(R.id.stockNameLabel);
         TextView stockPriceLabel = findViewById(R.id.stockPriceLabel);
@@ -96,16 +117,27 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         stockPriceLabel.setText("$" + stockPrice);
     }
 
+    /**
+     * This method creates and shows the BuyStockDialog
+     */
     public void openBuySharesDialog(){
         buyStockDialog = new BuyStockDialog(totalBalance, stockPrice, stockTicker);
         buyStockDialog.show(getSupportFragmentManager(), "Buy " + stockTicker);
     }
 
+    /**
+     * This method creates and shows the SellStockDialog
+     */
     public void openSellSharesDialog(){
         sellStockDialog = new SellStockDialog(totalBalance, stockPrice, sharesOwned, stockTicker);
         sellStockDialog.show(getSupportFragmentManager(), "Sell " + stockTicker);
     }
 
+    /**
+     * This method performs the action of buying a stock
+     *
+     * @param amount Amount to purchase
+     */
     @Override
     public void applyTexts(double amount) {
         // maybe refresh stock price here
@@ -120,6 +152,12 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         }
     }
 
+    /**
+     * This method updates and calculates all the values of buying a stock
+     * and updates them accordingly.
+     *
+     * @param amount Amount to purchase.
+     */
     public void buyStock(double amount){
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
@@ -181,6 +219,25 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         toast.show();
     }
 
+    /**
+     * This method performs the action of selling a stock.
+     *
+     * @param amount Amount to sell
+     * @param stockName Name of the stock.
+     */
+    @Override
+    public void applyTexts(double amount, String stockName) {
+        sellStock(amount);
+        getUserInfo();
+        sellStockDialog.dismiss();
+    }
+
+    /**
+     * This method updates and calculates all the values after selling
+     * an asset.
+     *
+     * @param amount Amount to sell.
+     */
     public void sellStock(double amount){
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
@@ -239,12 +296,5 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         ));
         Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
         toast.show();
-    }
-
-    @Override
-    public void applyTexts(double amount, String stockName) {
-        sellStock(amount);
-        getUserInfo();
-        sellStockDialog.dismiss();
     }
 }

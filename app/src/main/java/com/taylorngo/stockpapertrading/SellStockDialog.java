@@ -1,5 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,6 +20,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The SellStockDialog class implements the Dialog used
+ * when the user sells an asset.
+ *
+ * @author Taylor Ngo
+ */
 public class SellStockDialog extends AppCompatDialogFragment {
     private SellStockDialogListener listener;
 
@@ -34,10 +41,21 @@ public class SellStockDialog extends AppCompatDialogFragment {
     private EditText amountToSellInput;
     private Button confirmSellButton;
 
+    /**
+     * Default constructor for SellStockDialog.
+     */
     public SellStockDialog(){
         super();
     }
 
+    /**
+     * Constructor with values for SellStockDialog.
+     *
+     * @param balance User balance
+     * @param stockPrice Price of the asset the user wants to sell.
+     * @param sharesOwned The current amount of shares owned by the user.
+     * @param stockName The name of the asset to sell.
+     */
     public SellStockDialog(double balance, double stockPrice, double sharesOwned, String stockName){
         super();
         this.balance = balance;
@@ -46,6 +64,14 @@ public class SellStockDialog extends AppCompatDialogFragment {
         this.stockName = stockName;
     }
 
+    /**
+     * This method creates the SellStockDialog and initializes the
+     * proper values for the TextViews and functionality of the
+     * buttons.
+     *
+     * @param savedInstanceState savedInstanceState
+     * @return A Dialog representing the SellStockDialog.
+     */
     @NonNull
     @NotNull
     @Override
@@ -110,6 +136,11 @@ public class SellStockDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Overridden method that implements the SellStocKDialogListener
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -121,9 +152,11 @@ public class SellStockDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface represents the SellStockDialogListener
+     * and blueprints the method for selling an asset.
+     */
     public interface SellStockDialogListener {
         void applyTexts(double amount, String stockName);
     }
 }
-
-

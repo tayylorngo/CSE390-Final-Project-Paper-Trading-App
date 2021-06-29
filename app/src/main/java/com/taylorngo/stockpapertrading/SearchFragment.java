@@ -1,6 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +29,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * The SearchFragment class implements the search screen of the
+ * application where users can search for assets to purchase and sell.
+ *
+ * @author Taylor Ngo
+ */
 public class SearchFragment extends Fragment {
 
     private static final String SHARED_PREFS = "sharedPrefs";
@@ -43,6 +49,15 @@ public class SearchFragment extends Fragment {
 
     private SQLiteDatabase rDatabase;
 
+    /**
+     * This method creates the view for the SearchScreen
+     * which includes a TextView, EditText and button.
+     *
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstanceState
+     * @return A View representing the Search Screen of the application.
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +91,10 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This method makes an API request to gather all the stock data and
+     * open an activity with that information.
+     */
     public void getStockData(){
         String API_KEY = mContext.getString(R.string.api_key);
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + stockTicker + "?apikey=" + API_KEY;
@@ -117,6 +136,9 @@ public class SearchFragment extends Fragment {
         mQueue.add(request);
     }
 
+    /**
+     * This method closes the keyboard.
+     */
     public void closeKeyboard(){
         View view = getActivity().getCurrentFocus();
         if (view != null) {

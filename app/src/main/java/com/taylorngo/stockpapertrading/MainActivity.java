@@ -1,24 +1,33 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * The MainActivity class implements the MainActivity of the application which includes
+ * all the functionality and FragmentContainer to store each screen.
+ *
+ * @author Taylor Ngo
+ */
 public class MainActivity extends AppCompatActivity implements AddFundsDialog.AddFundsDialogListener, WithdrawFundsDialog.WithdrawFundsDialogListener {
     private static final String SHARED_PREFS = "sharedPrefs";
     private SettingsFragment currFrag;
 
+    /**
+     * This method creates the MainActivity and represents the onCreate()
+     * in the application's life cycle.
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
                 }
             };
 
+    /**
+     * This method adds funds to the user's account
+     *
+     * @param amount Amount of funds to be added.
+     */
     @Override
     public void applyTexts(double amount) {
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -71,6 +85,12 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         currFrag.closeAddDialog();
     }
 
+    /**
+     * This method withdraws funds from the user's account.
+     *
+     * @param amount Amount to be withdrawn.
+     * @param holder String to differentiate between add funds.
+     */
     @Override
     public void applyTexts(double amount, String holder) {
         SharedPreferences sharedPreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -85,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         currFrag.closeWithdrawDialog();
     }
 
+    /**
+     * This method rounds any number to two decimal places
+     *
+     * @param num Number to be rounded.
+     * @return Number rounded to two decimal places.
+     */
     public static double round(double num){
         return Math.round(num * 100.0) / 100.0;
     }

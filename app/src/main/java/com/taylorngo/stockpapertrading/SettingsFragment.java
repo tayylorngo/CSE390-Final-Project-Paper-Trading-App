@@ -1,6 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,12 +16,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+/**
+ * The SettingsFragment class represents the Settings page of the application.
+ *
+ * @author Taylor Ngo
+ */
 public class SettingsFragment extends Fragment {
 
     public static final String SHARED_PREFS = "sharedPrefs";
     private AddFundsDialog addFundsDialog;
     private WithdrawFundsDialog withdrawFundsDialog;
 
+    /**
+     * This method creates the SettingsFragment which has the
+     * sorting values, add/withdraw funds button and etc.
+     *
+     * @param inflater inflater
+     * @param container container
+     * @param savedInstanceState savedInstanceState
+     * @return A View representing the SettingsFragment.
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +92,13 @@ public class SettingsFragment extends Fragment {
         }
         RadioGroup sortBy = view.findViewById(R.id.sortByRadioGroup);
         sortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            /**
+             * This method acts as a listener to set the right
+             * sort value when a RadioButton is checked.
+             *
+             * @param group The RadioGroup
+             * @param checkedId The id of the checked RadioButton
+             */
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
@@ -89,6 +110,13 @@ public class SettingsFragment extends Fragment {
         });
         RadioGroup sortOrder = view.findViewById(R.id.sortOrderRadioGroup);
         sortOrder.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            /**
+             * This method acts as a listener to set the right
+             * sort order when a RadioButton is checked.
+             *
+             * @param group The RadioGroup
+             * @param checkedId The id of the checked RadioButton
+             */
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
@@ -101,11 +129,17 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This method creates and shows the AddFundsDialog
+     */
     public void openAddFundsDialog(){
         addFundsDialog = new AddFundsDialog();
         addFundsDialog.show(getActivity().getSupportFragmentManager(), "Add Funds");
     }
 
+    /**
+     * This method creates and shows the WithdrawFundsDialog
+     */
     public void openWithdrawFundsDialog(){
         SharedPreferences sharedPreferences = getView().getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         double currBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
@@ -113,10 +147,16 @@ public class SettingsFragment extends Fragment {
         withdrawFundsDialog.show(getActivity().getSupportFragmentManager(), "Withdraw Funds");
     }
 
+    /**
+     * This method closes the AddFundsDialog
+     */
     public void closeAddDialog(){
         this.addFundsDialog.dismiss();
     }
 
+    /**
+     * This method closes the WithdrawFundsDialog
+     */
     public void closeWithdrawDialog(){
         this.withdrawFundsDialog.dismiss();
     }

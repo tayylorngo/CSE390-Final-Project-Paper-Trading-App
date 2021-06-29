@@ -1,5 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,19 +14,33 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ *  The AddFundsDialog class implements the dialog used when the user
+ *  adds funds to their account.
+ *
+ *  @author Taylor Ngo
+ */
 public class AddFundsDialog extends AppCompatDialogFragment {
 
     private AddFundsDialogListener listener;
 
+    /**
+     * The constructor used to create the AddFundsDialog
+     */
     public AddFundsDialog(){
         super();
     }
 
+    /**
+     * This method creates the dialog and sets the TextViews and EditTexts
+     * to their proper values.
+     * @param savedInstanceState savedInstanceState
+     * @return A Dialog representing the AddFundsDialog
+     */
     @NonNull
     @NotNull
     @Override
@@ -68,6 +83,10 @@ public class AddFundsDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Overriden method to assign the AddFundsDialogListener
+     * @param context Context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,9 +98,11 @@ public class AddFundsDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface represents the AddFundsDialogListener
+     * and blueprints the function when the user adds funds to their account.
+     */
     public interface AddFundsDialogListener {
         void applyTexts(double amount);
     }
 }
-
-

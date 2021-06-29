@@ -1,9 +1,18 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import android.provider.BaseColumns;
 
+/**
+ * This class implements the column names in the database.
+ *
+ * @author Taylor Ngo
+ */
 public class StocksContract {
 
+    /**
+     * Private constructor so this class cannot be instantiated.
+     */
     private StocksContract(){}
 
     public static final class StockEntry implements BaseColumns {

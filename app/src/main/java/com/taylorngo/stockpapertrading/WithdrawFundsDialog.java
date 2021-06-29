@@ -1,5 +1,6 @@
+// Taylor Ngo
+// 112626118
 package com.taylorngo.stockpapertrading;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -20,20 +21,40 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ *  The WithdrawableFundsDialog class implements the dialog
+ *  used to Withdraw funds from the user.
+ *  @author Taylor Ngo
+ */
 public class WithdrawFundsDialog extends AppCompatDialogFragment {
 
     private WithdrawFundsDialogListener listener;
     private double currBalance;
 
+    /**
+     *  Constructor that creates the WithdrawableFundsDialog
+     */
     public WithdrawFundsDialog(){
         super();
     }
 
+    /**
+     * Constructor that takes in the current balance of the user.
+     * @param currBalance Current balance of the user.
+     */
     public WithdrawFundsDialog(double currBalance){
         super();
         this.currBalance = currBalance;
     }
 
+    /**
+     * This method creates the dialog and sets
+     * TextViews and EditText functions for the
+     * dialog.
+     *
+     * @param savedInstanceState
+     * @return A Dialog object representing the WithdrawFundsDialog
+     */
     @NonNull
     @NotNull
     @Override
@@ -42,6 +63,12 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.withdraw_funds_dialog, null);
         builder.setView(view).setTitle("Withdraw Funds").setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            /**
+             * This method does nothing an acts as the cancel button in the Dialog.
+             *
+             * @param dialog dialog
+             * @param which which
+             */
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -53,12 +80,32 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
 
         EditText fundsInput = view.findViewById(R.id.withdrawFundsInput);
         fundsInput.addTextChangedListener(new TextWatcher() {
+
+            /**
+             * Does nothing
+             * @param s s
+             * @param start start
+             * @param count count
+             * @param after after
+             */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
+            /**
+             * Does nothing
+             * @param s s
+             * @param start start
+             * @param before before
+             * @param count count
+             */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
+            /**
+             * This method occurs when the text is changed in the EditText
+             * and sets it so the TextView is empty when 0 is the text.
+             * @param s
+             */
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == 1 && s.toString().equals("0"))
@@ -83,6 +130,10 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * Overriden method used to set the WithdrawFundsDialog listener.
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -94,6 +145,10 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * This interface implements the WithdrawFundsDialogListener
+     * and blueprints the method used when the dialog is activated.
+     */
     public interface WithdrawFundsDialogListener {
         void applyTexts(double amount, String holder);
     }
