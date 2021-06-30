@@ -80,6 +80,11 @@ public class HomeFragment extends Fragment {
         sortList(sortBy, sortOrder);
 
         totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
+        if(totalCost == 0){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("totalCost", "0.0");
+            editor.apply();
+        }
         totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         actualBalance = totalBalance + totalStocksPrice;
         actualBalance = MainActivity.round(actualBalance);

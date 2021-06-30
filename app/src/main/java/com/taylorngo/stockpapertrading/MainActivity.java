@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 //        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("profit", "0.0");
 //        editor.clear();
 //        editor.apply();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();

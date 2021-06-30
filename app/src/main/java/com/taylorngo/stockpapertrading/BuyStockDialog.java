@@ -98,6 +98,9 @@ public class BuyStockDialog extends AppCompatDialogFragment {
                     totalCostLabel.setText("Total Cost: $" + 0.0);
                     return;
                 }
+                if(amountToOrder.getText().toString().equals(".")){
+                    return;
+                }
                 double total = stockPrice * Double.parseDouble(amountToOrder.getText().toString());
                 total = MainActivity.round(total);
                 totalCostLabel.setText("Total Cost: $" + total);

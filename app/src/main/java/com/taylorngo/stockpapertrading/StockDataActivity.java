@@ -217,6 +217,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         ));
         Toast toast = Toast.makeText(this, "Purchased successfully", Toast.LENGTH_SHORT);
         toast.show();
+        mDatabase.close();
     }
 
     /**
@@ -257,23 +258,16 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         sharesOwned -= amount;
         sharesOwned = MainActivity.round(sharesOwned);
 
-        double oldProfit = Double.parseDouble(sharedPreferences.getString("profit", "0.0"));
-        double profit = this.stockPrice - this.averageCost;
-        profit += oldProfit;
-        profit = MainActivity.round(profit);
-        editor.putString("profit", String.valueOf(profit));
-        editor.apply();
-
-        this.totalCost -= (stockPrice * amount);
         if(sharesOwned == 0){
-            this.averageCost = 0.0;
             this.totalReturn = 0.0;
+            this.totalCost = 0.0;
         }
         else{
-            this.averageCost = totalCost / sharesOwned;
-            this.averageCost = MainActivity.round(this.averageCost);
-            this.totalReturn = (stockPrice * sharesOwned) - totalCost;
-            this.totalReturn = MainActivity.round(this.totalReturn);
+//            this.totalReturn = (stockPrice * sharesOwned) - totalCost;
+//            this.totalReturn = MainActivity.round(this.totalReturn);
+            this.totalCost -= (averageCost * amount);
+//            this.averageCost = totalCost / sharesOwned;
+//            this.averageCost = MainActivity.round(this.averageCost);
         }
 
         if(sharesOwned == 0){
@@ -288,6 +282,16 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
             mDatabase.update(StocksContract.StockEntry.TABLE_NAME, cv, "name=?", new String[]{stockTicker});
         }
 
+        double oldProfit = Double.parseDouble(sharedPreferences.getString("profit", "0.0"));
+        double profit = (this.stockPrice - this.averageCost) * amount;
+        profit += oldProfit;
+        profit = MainActivity.round(profit);
+        editor.putString("profit", String.valueOf(profit));
+        editor.apply();
+
+        if(sharesOwned == 0){
+            this.averageCost = 0.0;
+        }
 
         HomeFragment.mAdapter.swapCursor(mDatabase.query(
                 StocksContract.StockEntry.TABLE_NAME,
@@ -296,5 +300,6 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         ));
         Toast toast = Toast.makeText(this, "Sold " + amount + " shares of " + stockName + " successfully", Toast.LENGTH_SHORT);
         toast.show();
+        mDatabase.close();
     }
 }
