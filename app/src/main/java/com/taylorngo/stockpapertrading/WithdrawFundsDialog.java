@@ -76,7 +76,7 @@ public class WithdrawFundsDialog extends AppCompatDialogFragment {
         });
 
         TextView currBalanceLabel = view.findViewById(R.id.withdrawDialogCurrBalanceLabel);
-        currBalanceLabel.setText("Withdrawable Balance: $" + currBalance);
+        currBalanceLabel.setText("Withdrawable Balance: $" + MainActivity.priceify(currBalance));
 
         EditText fundsInput = view.findViewById(R.id.withdrawFundsInput);
         fundsInput.addTextChangedListener(new TextWatcher() {

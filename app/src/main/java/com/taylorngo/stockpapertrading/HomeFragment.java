@@ -50,11 +50,11 @@ public class HomeFragment extends Fragment {
         SharedPreferences sharedPreferences = view.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         TextView buyingPowerLabel = view.findViewById(R.id.buyingPowerLabel);
-        buyingPowerLabel.setText("Buying Power: $" + sharedPreferences.getString("balance", "0.0"));
+        buyingPowerLabel.setText("Buying Power: $" + MainActivity.priceify(Double.parseDouble(sharedPreferences.getString("balance", "0.0"))));
         double totalBalance = Double.parseDouble(sharedPreferences.getString("balance", "0.0"));
         double totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         double actualBalance = totalBalance + totalStocksPrice;
-        balanceLabel.setText("$" + (actualBalance));
+        balanceLabel.setText("$" + MainActivity.priceify(actualBalance));
 
         double totalCost = 0.0;
         StocksDBHelper dbHelper = new StocksDBHelper(view.getContext());
@@ -88,20 +88,20 @@ public class HomeFragment extends Fragment {
         totalStocksPrice = Double.parseDouble(sharedPreferences.getString("totalCost", "0.0"));
         actualBalance = totalBalance + totalStocksPrice;
         actualBalance = MainActivity.round(actualBalance);
-        balanceLabel.setText("$" + (actualBalance));
+        balanceLabel.setText("$" + MainActivity.priceify(actualBalance));
         TextView profitLabel = view.findViewById(R.id.profitLossLabel);
         double profit = (totalStocksPrice - totalCost);
         profit += Double.parseDouble(sharedPreferences.getString("profit", "0.0"));
         profit = MainActivity.round(profit);
         if(profit < 0){
-            profitLabel.setText("Total Profit/Loss: -$" + Math.abs(profit));
+            profitLabel.setText("Total Profit/Loss: -$" + MainActivity.priceify(Math.abs(profit)));
             profitLabel.setTextColor(Color.RED);
         }
         else if(profit == 0){
-            profitLabel.setText("Total Profit/Loss: $" + Math.abs(profit));
+            profitLabel.setText("Total Profit/Loss: $" + MainActivity.priceify(Math.abs(profit)));
         }
         else{
-            profitLabel.setText("Total Profit/Loss: $" + profit);
+            profitLabel.setText("Total Profit/Loss: $" + MainActivity.priceify(profit));
             profitLabel.setTextColor(Color.GREEN);
         }
         FloatingActionButton refreshBtn = view.findViewById(R.id.refreshBtn);

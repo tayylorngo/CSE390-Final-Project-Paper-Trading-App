@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.DecimalFormat;
+
 /**
  * The MainActivity class implements the MainActivity of the application which includes
  * all the functionality and FragmentContainer to store each screen.
@@ -114,5 +116,13 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
      */
     public static double round(double num){
         return Math.round(num * 100.0) / 100.0;
+    }
+
+    public static String priceify(double num){
+        if(num == 0){
+            return String.valueOf(num);
+        }
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        return formatter.format(num);
     }
 }

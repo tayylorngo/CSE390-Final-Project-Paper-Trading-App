@@ -75,10 +75,10 @@ public class BuyStockDialog extends AppCompatDialogFragment {
         });
 
         currBalanceLabel = view.findViewById(R.id.availableBalanceLabel);
-        currBalanceLabel.setText("Amount available to purchase: $" + balance);
+        currBalanceLabel.setText("Amount available to purchase: $" + MainActivity.priceify(balance));
 
         pricePerShareLabel = view.findViewById(R.id.pricePerShareLabel);
-        pricePerShareLabel.setText("Price per share (approx.): $" + stockPrice);
+        pricePerShareLabel.setText("Price per share (approx.): $" + MainActivity.priceify(stockPrice));
 
         totalCostLabel = view.findViewById(R.id.totalOrderCostLabel);
         totalCostLabel.setText("Total Cost: $" + 0.0);
@@ -103,7 +103,7 @@ public class BuyStockDialog extends AppCompatDialogFragment {
                 }
                 double total = stockPrice * Double.parseDouble(amountToOrder.getText().toString());
                 total = MainActivity.round(total);
-                totalCostLabel.setText("Total Cost: $" + total);
+                totalCostLabel.setText("Total Cost: $" + MainActivity.priceify(total));
             }
         });
 

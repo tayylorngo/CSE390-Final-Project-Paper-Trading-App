@@ -88,13 +88,13 @@ public class SellStockDialog extends AppCompatDialogFragment {
         });
 
         availableSharesToSellLabel = view.findViewById(R.id.availableSharesToSellLabel);
-        availableSharesToSellLabel.setText("Available shares to sell: " + sharesOwned);
+        availableSharesToSellLabel.setText("Available shares to sell: " + MainActivity.priceify(sharesOwned));
 
         currBalanceLabel = view.findViewById(R.id.currBalanceSellLabel);
-        currBalanceLabel.setText("Current Balance: $" + this.balance);
+        currBalanceLabel.setText("Current Balance: $" + MainActivity.priceify(this.balance));
 
         pricePerShareToSellLabel = view.findViewById(R.id.pricePerShareSellLabel);
-        pricePerShareToSellLabel.setText("Price per share (approx.): $" + stockPrice);
+        pricePerShareToSellLabel.setText("Price per share (approx.): $" + MainActivity.priceify(stockPrice));
 
         amountToSellInput = view.findViewById(R.id.amountToSellInput);
 
@@ -113,7 +113,7 @@ public class SellStockDialog extends AppCompatDialogFragment {
                 }
                 double total = stockPrice * Double.parseDouble(amountToSellInput.getText().toString());
                 total = MainActivity.round(total);
-                totalSellValueLabel.setText("Total: $" + total);
+                totalSellValueLabel.setText("Total: $" + MainActivity.priceify(total));
             }
         });
 

@@ -93,16 +93,16 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
      */
     public void getUserInfo(){
         TextView sharesOwnedLabel = findViewById(R.id.sharesOwnedLabel);
-        sharesOwnedLabel.setText("Shares Owned: " + sharesOwned);
+        sharesOwnedLabel.setText("Shares Owned: " + MainActivity.priceify(sharesOwned));
         TextView totalReturnLabel = findViewById(R.id.totalReturnLabel);
         if(totalReturn < 0){
-            totalReturnLabel.setText("Total Return: -$" + Math.abs(totalReturn));
+            totalReturnLabel.setText("Total Return: -$" + MainActivity.priceify(Math.abs(totalReturn)));
         }
         else{
-            totalReturnLabel.setText("Total Return: $" + totalReturn);
+            totalReturnLabel.setText("Total Return: $" + MainActivity.priceify(totalReturn));
         }
         TextView averageCostLabel = findViewById(R.id.averageCostLabel);
-        averageCostLabel.setText("Average Cost: $" + averageCost);
+        averageCostLabel.setText("Average Cost: $" + MainActivity.priceify(averageCost));
     }
 
     /**
@@ -114,7 +114,7 @@ public class StockDataActivity extends AppCompatActivity implements BuyStockDial
         TextView stockTickerLabel = findViewById(R.id.stockTickerLabel);
         stockNameLabel.setText(stockName);
         stockTickerLabel.setText(stockTicker);
-        stockPriceLabel.setText("$" + stockPrice);
+        stockPriceLabel.setText("$" + MainActivity.priceify(stockPrice));
     }
 
     /**

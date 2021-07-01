@@ -88,7 +88,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
         String ticker = mCursor.getString(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_NAME));
         holder.stockItemNameLabel.setText(ticker);
         double shares = mCursor.getDouble(mCursor.getColumnIndex(StocksContract.StockEntry.COLUMN_AMOUNT));
-        holder.stockItemSharesLabel.setText(shares + " shares");
+        holder.stockItemSharesLabel.setText(MainActivity.priceify(shares) + " shares");
 
         String API_KEY = mContext.getString(R.string.api_key);
         String urlString = "https://financialmodelingprep.com/api/v3/quote/" + ticker + "?apikey=" + API_KEY;
@@ -113,7 +113,7 @@ public class StocksAdapter extends RecyclerView.Adapter<StocksAdapter.StocksView
                                 editor.apply();
                                 double total = stock.getDouble("price") * shares;
                                 total = MainActivity.round(total);
-                                holder.stockItemPriceLabel.setText("$" + total);
+                                holder.stockItemPriceLabel.setText("$" + MainActivity.priceify(total));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
