@@ -118,6 +118,13 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
         return Math.round(num * 100.0) / 100.0;
     }
 
+    /**
+     * This method returns a String representation of a price
+     * with proper formatting (i.e commas)
+     *
+     * @param num The number to be formatted
+     * @return String representation of a price with proper formatting
+     */
     public static String priceify(double num){
         if(num == 0){
             return String.valueOf(num);

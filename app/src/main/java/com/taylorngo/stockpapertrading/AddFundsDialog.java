@@ -65,8 +65,9 @@ public class AddFundsDialog extends AppCompatDialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 1 && s.toString().equals("0"))
+                if (s.length() == 1 && s.toString().equals("0")) {
                     fundsInput.setText("");
+                }
             }
         });
 
