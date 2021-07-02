@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements AddFundsDialog.Ad
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("YOOOO");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNav = findViewById(R.id.navbar);

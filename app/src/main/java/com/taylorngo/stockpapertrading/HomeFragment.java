@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment {
         if(sortBy.equals("Name")){
             sortBy = StocksContract.StockEntry.COLUMN_NAME;
         }
-        else if(sortBy.equals("Number Of Shares")){
+        else if(sortBy.equals("Number of Shares")){
             sortBy = StocksContract.StockEntry.COLUMN_AMOUNT;
         }
         else if(sortBy.equals("Total Cost")){
