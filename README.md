@@ -29,7 +29,8 @@ Homescreen:
 ![homescreen](https://user-images.githubusercontent.com/47530918/128818304-12d09e9b-059c-484e-bcc4-e98630f4e4bd.png)
 
 Selling Assets:
-![sellscreen](https://user-images.githubusercontent.com/47530918/128818488-b8d2b385-c3b0-4a1f-97f8-ab5d48e55751.png)
+
+![sellstock](https://user-images.githubusercontent.com/47530918/128818752-7295ec10-0ef4-43d4-b13b-0ecbb38710f0.jpg)
 
 ## Real-time Data
 
