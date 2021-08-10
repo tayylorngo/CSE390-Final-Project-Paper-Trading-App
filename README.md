@@ -10,6 +10,7 @@ You can add funds to your account via the settings screen. Similarly you can wit
 ## Buying Assets
 You can search for an asset using the symbol the asset has, (ex: APPL for Apple, MSFT for Microsoft).
 From there, you can purchase any amount of shares. (Fractional shares are enabled!)
+
 ![buystock](https://user-images.githubusercontent.com/47530918/128817887-fe991986-147b-4dde-ac34-f2f1f7d46a81.png)
 
 
