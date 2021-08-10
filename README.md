@@ -24,7 +24,15 @@ Buying Assets:
 To sell an asset that you own, in your home screen you can select an asset that you own which will bring you to its page.
 
 Homescreen:
+
 ![homescreen](https://user-images.githubusercontent.com/47530918/128818304-12d09e9b-059c-484e-bcc4-e98630f4e4bd.png)
 
+Selling Assets:
+![sellscreen](https://user-images.githubusercontent.com/47530918/128818488-b8d2b385-c3b0-4a1f-97f8-ab5d48e55751.png)
 
+## Real-time Data
 
+This application uses the Financial Modeling Prep API to gather real-time asset data. You can use the refresh button on the home screen to update your data. 
+Whenever you switch to the home screen, the data should also automatically update.
+
+Link to API documentation: https://financialmodelingprep.com/developer/docs
