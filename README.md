@@ -16,6 +16,7 @@ Stock Data:
 ![stockData](https://user-images.githubusercontent.com/47530918/128818369-402e4f1e-80ec-4f34-bc77-e590f065fbad.png)
 
 Buying Assets:
+
 ![buystock](https://user-images.githubusercontent.com/47530918/128817887-fe991986-147b-4dde-ac34-f2f1f7d46a81.png)
 
 
