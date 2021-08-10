@@ -1,2 +1,4 @@
-# CSE390-Final-Project-Paper-Trading-App
+#Stock Market Paper Trading Android App
+
+
 
